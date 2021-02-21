@@ -30,6 +30,8 @@ enum custom_keycodes {
     KC_D_MUTE
 };
 
+#define S_BSPC LSFT_T(KC_BSPC)
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*
@@ -52,13 +54,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,------------------------------------------------.                    ,---------------------------------------------------.
   KC_ESC,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,             LT(_SWITCH,KC_6), KC_7,   KC_8,    KC_9,    KC_0,    KC_GRV, \
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
-  LT(_NUMPAD,KC_TAB),KC_Q,KC_W,KC_E,  KC_R,    KC_T,                      KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_BSPC, \
+  LT(_NUMPAD,KC_TAB),KC_Q,KC_W,KC_E,  KC_R,    KC_T,                      KC_Y,    KC_U,   KC_I,    KC_O,    KC_P,    KC_LBRC, \
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
   KC_LSFT,  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                      KC_H,    KC_J,   KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
-  KC_LCTRL, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,  KC_MUTE,  KC_D_MUTE,KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT), \
+  KC_BSLS, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,  KC_MUTE,  KC_D_MUTE,KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_RBRC), \
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
-                 KC_BSPC, KC_LGUI, KC_LOWER, KC_ENT,  KC_SPC   ,     KC_SPC, KC_ENT ,  KC_RAISE, KC_RCTRL, KC_RALT \
+                 KC_LGUI, KC_LCTRL, KC_LOWER, S_BSPC,  KC_DEL,      KC_ENT, KC_SPC,  KC_RAISE, KC_RCTRL, KC_RALT \
   //            \--------+--------+--------+---------+-------|   |--------+---------+--------+---------+-------/
 ),
 
@@ -275,34 +277,34 @@ char layer_state_str[24];
 // _COLEMAK,
 // Light on inner column and underglow
 const rgblight_segment_t PROGMEM layer_qwerty_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 20, HSV_RED}
+    {0, 71, HSV_RED}
 );
 const rgblight_segment_t PROGMEM layer_colemakdh_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 20, HSV_PINK}
+    {0, 71, HSV_PINK}
 );
 
 // _NUM,
 // Light on inner column and underglow
 const rgblight_segment_t PROGMEM layer_num_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 20, HSV_TEAL}
+    {0, 71, HSV_TEAL}
 );
 // _SYMBOL,
 // Light on inner column and underglow
 const rgblight_segment_t PROGMEM layer_symbol_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 20, HSV_BLUE}
+    {0, 71, HSV_BLUE}
 );
 // _COMMAND,
 // Light on inner column and underglow
 const rgblight_segment_t PROGMEM layer_command_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 20, HSV_PURPLE}
+    {0, 71, HSV_PURPLE}
 );
 
 //_NUMPAD
 const rgblight_segment_t PROGMEM layer_numpad_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-{0, 20, HSV_ORANGE}
+{0, 71, HSV_ORANGE}
 );
 const rgblight_segment_t PROGMEM layer_numpad_rh_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-	{0, 20, HSV_ORANGE}
+	{0, 71, HSV_ORANGE}
 	//{10, 3, HSV_BLUE},
     //{15, 3, HSV_BLUE},
 	//{18, 3, HSV_BLUE}
@@ -316,7 +318,7 @@ const rgblight_segment_t PROGMEM layer_move_lights[] = RGBLIGHT_LAYER_SEGMENTS(
 
 // _SWITCHER   // light up top row
 const rgblight_segment_t PROGMEM layer_switcher_lights[] = RGBLIGHT_LAYER_SEGMENTS(
-    {0, 20, HSV_GREEN}
+    {0, 71, HSV_GREEN}
 	//{9, 2, HSV_GREEN},
 	//{17, 2, HSV_GREEN},
 	//{23, 2, HSV_GREEN}
@@ -351,7 +353,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 void keyboard_post_init_user(void) {
     // Enable the LED layers
     rgblight_layers = my_rgb_layers;
-	rgblight_mode(10);// haven't found a way to set this in a more useful way
+	rgblight_mode(1);// haven't found a way to set this in a more useful way
 
 }
 #endif
@@ -371,7 +373,7 @@ static void render_logo(void) {
 static void print_status_narrow(void) {
     // Print current mode
     oled_write_P(PSTR("\n\n"), false);
-    oled_write_ln_P(PSTR("Dane\n"), false);
+    oled_write_ln_P(PSTR("FT45\n"), false);
     //oled_write_ln_P(PSTR("MODE"), false);
     oled_write_ln_P(PSTR(""), false);
     /*
