@@ -58,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|------+-------+--------+--------+--------+------|                   |--------+-------+--------+--------+--------+---------|
   KC_LSFT,  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                      KC_H,    KC_J,   KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
-  KC_BSLS, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,  KC_MUTE,  KC_D_MUTE,KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_RBRC), \
+  KC_BSLS, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,  KC_MUTE,  KC_D_MUTE,KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH,   KC_RBRC, \
   //|------+-------+--------+--------+--------+------|  ===  |   |  ===  |--------+-------+--------+--------+--------+---------|
                  KC_LGUI, KC_LCTRL, KC_LOWER, S_BSPC,  KC_DEL,      KC_ENT, KC_SPC,  KC_RAISE, KC_RCTRL, KC_RALT \
   //            \--------+--------+--------+---------+-------|   |--------+---------+--------+---------+-------/
@@ -341,8 +341,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 	rgblight_set_layer_state(7, layer_state_cmp(state, _DEFAULTS) && layer_state_cmp(default_layer_state,_COLEMAKDH));
 
     //layer_state_cmp(state, 1));
-	rgblight_set_layer_state(1, layer_state_cmp(state, _LOWER));
-	rgblight_set_layer_state(2, layer_state_cmp(state, _RAISE));
+	rgblight_set_layer_state(1, layer_state_cmp(state, _RAISE));
+	rgblight_set_layer_state(2, layer_state_cmp(state, _LOWER));
 	rgblight_set_layer_state(3, layer_state_cmp(state, _ADJUST));
 	rgblight_set_layer_state(4, layer_state_cmp(state, _NUMPAD));
 	//if (!has_usb())
@@ -353,7 +353,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 void keyboard_post_init_user(void) {
     // Enable the LED layers
     rgblight_layers = my_rgb_layers;
-	rgblight_mode(1);// haven't found a way to set this in a more useful way
+	//rgblight_mode(1);// haven't found a way to set this in a more useful way
 
 }
 #endif
@@ -481,31 +481,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             } else {
                 layer_off(_RAISE);
                 update_tri_layer(_LOWER, _RAISE, _ADJUST);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
             return false;
         case KC_ADJUST:
@@ -650,20 +625,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 #ifdef ENCODER_ENABLE
 
-void encoder_update_user(uint8_t index, bool clockwise) {
-    if (index == 0) {
-        if (clockwise) {
-            tap_code(KC_VOLU);
-        } else {
-            tap_code(KC_VOLD);
-        }
-    } else if (index == 1) {
-        if (clockwise) {
-            tap_code(KC_PGDOWN);
-        } else {
-            tap_code(KC_PGUP);
-        }
-    }
-}
+const uint16_t PROGMEM encoder_keymaps[][2][2] = {
+    [_QWERTY] =  { { C(S(KC_TAB)), C(KC_TAB) },     { KC_PGDN,      KC_PGUP } },
+    [_LOWER]  =  { { C(KC_LEFT),   C(KC_RGHT) },    { KC_VOLD,  KC_VOLU } },
+    [_RAISE]  =  { { KC_TRNS,      KC_TRNS },       { G(KC_TAB),    G(S(KC_TAB)) } },
+    [_ADJUST] =  { { KC_TRNS,      KC_TRNS },       { KC_TRNS,      KC_TRNS } },
+};
 
+void encoder_update_user(uint8_t index, bool clockwise) {
+    int layer = get_highest_layer(layer_state);
+
+    uint16_t code;
+    do {
+        code = pgm_read_word(&encoder_keymaps[layer--][index][clockwise]);
+    } while (code == KC_TRNS);
+
+    tap_code16(code);
+}
 #endif

@@ -27,32 +27,35 @@ for more options.
 #define CUSTOM_LAYER_READ //if you remove this it causes issues - needs better guarding
 #define USE_SERIAL_PD2
 
-#define TAPPING_FORCE_HOLD
+//#define TAPPING_FORCE_HOLD
 #ifdef TAPPING_TERM
     #undef TAPPING_TERM
-    #define TAPPING_TERM 200
+    //#define TAPPING_TERM 200
 #endif
+
 #define ENCODER_DIRECTION_FLIP
-
-
-#define RGBLIGHT_SLEEP
-#define RGBLIGHT_LAYERS
+#ifdef ENCODER_RESOLUTION
+    #undef ENCODER_RESOLUTION
+    #define ENCODER_RESOLUTION 8
+#endif
 
 /* ws2812 RGB LED */
 #define RGB_DI_PIN D3
 
 
 #ifdef RGB_MATRIX_ENABLE
-#define RGBLED_NUM 72    // Number of LEDs
-#define DRIVER_LED_TOTAL RGBLED_NUM
+    #define RGBLED_NUM 72    // Number of LEDs
+    #define DRIVER_LED_TOTAL RGBLED_NUM
 #endif
 
 #ifdef RGBLIGHT_ENABLE
     #undef RGBLED_NUM
+    #define RGBLIGHT_SLEEP
+    #define RGBLIGHT_LAYERS
     //#define RGBLIGHT_ANIMATIONS
 	#define RGBLIGHT_EFFECT_BREATHING
 	#define RGBLIGHT_EFFECT_RAINBOW_MOOD
-	#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
+	//#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
 	//#define RGBLIGHT_EFFECT_SNAKE
 	//#define RGBLIGHT_EFFECT_KNIGHT
 	//#define RGBLIGHT_EFFECT_CHRISTMAS
