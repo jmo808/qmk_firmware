@@ -23,6 +23,7 @@ for more options.
 
 #define SSD1306OLED
 #define CUSTOM_FONT
+#define OLED_FONT_H "keyboards/sofle/keymaps/jules/glcdfont.c"
 
 #define CUSTOM_LAYER_READ //if you remove this it causes issues - needs better guarding
 #define USE_SERIAL_PD2
@@ -36,7 +37,7 @@ for more options.
 #define ENCODER_DIRECTION_FLIP
 #ifdef ENCODER_RESOLUTION
     #undef ENCODER_RESOLUTION
-    #define ENCODER_RESOLUTION 8
+    #define ENCODER_RESOLUTION 4
 #endif
 
 /* ws2812 RGB LED */
@@ -50,12 +51,13 @@ for more options.
 
 #ifdef RGBLIGHT_ENABLE
     #undef RGBLED_NUM
+    #define RGBLIGHT_SPLIT
     #define RGBLIGHT_SLEEP
     #define RGBLIGHT_LAYERS
     //#define RGBLIGHT_ANIMATIONS
 	#define RGBLIGHT_EFFECT_BREATHING
 	#define RGBLIGHT_EFFECT_RAINBOW_MOOD
-	//#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
+	#define RGBLIGHT_EFFECT_RAINBOW_SWIRL
 	//#define RGBLIGHT_EFFECT_SNAKE
 	//#define RGBLIGHT_EFFECT_KNIGHT
 	//#define RGBLIGHT_EFFECT_CHRISTMAS
