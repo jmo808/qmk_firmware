@@ -1,6 +1,8 @@
 // SOFLE
 
 #include QMK_KEYBOARD_H
+#include <stdio.h>
+
 
 enum sofle_layers {
     /* _M_XYZ = Mac Os, _W_XYZ = Win/Linux */
@@ -39,13 +41,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * | ESC  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |  `   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * | TAB  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  | Bspc |
+ * | TAB  |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  | LBRC |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |LShift|   A  |   S  |   D  |   F  |   G  |-------.    ,-------|   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------| MUTE  |    |DISCORD|------+------+------+------+------+------|
- * | LCTR |   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  |LShift|
+ * |------+------+------+------+------+------| MUTE  |    |       |------+------+------+------+------+------|
+ * | BSLS |   Z  |   X  |   C  |   V  |   B  |-------|    |-------|   N  |   M  |   ,  |   .  |   /  | RBRC |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
- *            | Bspc | WIN  |LOWER | Enter| /Space  /       \Enter \  |SPACE |RAISE | RCTR | RAlt |
+ *            | LGUI | CTRL |LOWER | BSPS | /Delete /       \Enter \  |SPACE |RAISE | RCTR | RAlt |
  *            |      |      |      |      |/       /         \      \ |      |      |      |      |
  *            `----------------------------------'           '------''---------------------------'
  */
@@ -134,7 +136,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |  ESC |   !  |   @  |   #  |   $  |   %  |                    |   ^  |   &  |   *  |   (  |   )  | F12  |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |   =  |   1  |   2  |   3  |   4  |   5  |-------.    ,-------|   6  |   7  |   8  |   9  |   0  |   |  |
+ * |   =  |   1  |   2  |   3  |   4  |   5  |-------.    ,-------|   6  |   7  |   8  |   9  |   0  |   -  |
  * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
  * |   _  |      |      |      |      |      |-------|    |-------|      |      |   ,  |   .  |   \  |   +  |
  * `-----------------------------------------/       /     \      \-----------------------------------------'
@@ -387,6 +389,13 @@ void render_status_title(void){
     oled_write_ln_P(PSTR(""), false);
 };
 
+void render_prompt(void) {
+    char wpm_str[10];
+    bool blink = (timer_read() % 1000) < 500;
+
+    oled_write_ln_P(blink ? sprintf(wpm_str, " HP:> _  : %03d", const char(get_current_wpm())) : sprintf(wpm_str, " HP:>    : %03d", const char(get_current_wpm())), false);
+};
+
 static void print_status_narrow(void) {
 
     static const char PROGMEM layout_indicators[3][3] = {
@@ -466,6 +475,9 @@ static void print_status_narrow(void) {
     } else {
         oled_write_P(PSTR("  "), false);
     }
+
+    oled_write_ln_P(PSTR(" "), false);
+    render_prompt();
 };
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
